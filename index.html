@@ -10,12 +10,57 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  :root{
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+  }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{background:#0b0a0d;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   ::selection{background:rgba(217,179,95,.3);color:#fff}
   @keyframes glowPulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.9;transform:scale(1.06)}}
   @keyframes floatUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes sealFloat{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}
+
+  /* Hero entrance — staggered fade-up on load */
+  .fu{opacity:0;animation:floatUp .9s var(--ease-out) both;will-change:transform,opacity}
+  .fu1{animation-delay:.05s}.fu2{animation-delay:.16s}.fu3{animation-delay:.28s}
+  .fu4{animation-delay:.4s}.fu5{animation-delay:.52s}.fu6{animation-delay:.66s}
+
+  /* Scroll reveal */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease-out),transform .8s var(--ease-out);will-change:transform,opacity}
+  .reveal.is-visible{opacity:1;transform:translateY(0)}
+  .reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+
+  /* Concept cards */
+  .card .card-img{transition:transform .7s var(--ease-out)}
+  @media (hover:hover) and (pointer:fine){
+    .card{transition:transform .45s var(--ease-out),box-shadow .45s var(--ease-out)}
+    .card:hover{transform:translateY(-7px);box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 46px rgba(214,160,72,.13)}
+    .card:hover .card-img{transform:scale(1.07)}
+  }
+
+  /* Seal gentle breathing */
+  .seal{animation:sealFloat 5.5s ease-in-out infinite}
+
+  /* Buttons — press feedback + subtle lift */
+  .btn{transition:transform .18s var(--ease-out)}
+  .btn:active{transform:scale(.97)}
+  @media (hover:hover) and (pointer:fine){.btn:hover{transform:translateY(-2px)}}
+
+  /* Nav link underline sweep */
+  .nav-link{position:relative}
+  @media (hover:hover) and (pointer:fine){
+    .nav-link::after{content:"";position:absolute;left:0;right:100%;bottom:-5px;height:1.5px;background:linear-gradient(90deg,#caa14e,#f6e3a1);transition:right .35s var(--ease-out)}
+    .nav-link:hover::after{right:0}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{scroll-behavior:auto}
+    .fu,.reveal{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}
+    .seal{animation:none}
+    .card:hover,.btn:hover,.btn:active,.card:hover .card-img{transform:none!important}
+  }
 </style>
 </head>
 <body>
@@ -34,10 +79,10 @@
       </span>
     </a>
     <nav style="display:flex;align-items:center;gap:clamp(10px,2vw,30px);flex-wrap:wrap;justify-content:flex-end">
-      <a href="#konzept" style="color:#cfc7b8;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.02em;white-space:nowrap">Konzept</a>
-      <a href="#app" style="color:#cfc7b8;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.02em;white-space:nowrap">Die App</a>
-      <a href="#kontakt" style="color:#cfc7b8;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.02em;white-space:nowrap">Kontakt</a>
-      <a href="#" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;text-decoration:none;font-weight:600;font-size:14px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);box-shadow:0 6px 18px rgba(202,161,78,.32);white-space:nowrap">Online bestellen</a>
+      <a href="#konzept" class="nav-link" style="color:#cfc7b8;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.02em;white-space:nowrap">Konzept</a>
+      <a href="#app" class="nav-link" style="color:#cfc7b8;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.02em;white-space:nowrap">Die App</a>
+      <a href="#kontakt" class="nav-link" style="color:#cfc7b8;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.02em;white-space:nowrap">Kontakt</a>
+      <a href="#" class="btn" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;text-decoration:none;font-weight:600;font-size:14px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);box-shadow:0 6px 18px rgba(202,161,78,.32);white-space:nowrap">Online bestellen</a>
     </nav>
   </header>
 
@@ -49,7 +94,7 @@
     <div style="position:relative;z-index:2;max-width:980px;margin:0 auto;display:flex;flex-direction:column;align-items:center">
 
       <!-- eyebrow with gold rule -->
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:clamp(26px,4vh,40px)">
+      <div class="fu fu1" style="display:flex;align-items:center;gap:14px;margin-bottom:clamp(26px,4vh,40px)">
         <span style="width:clamp(28px,7vw,58px);height:1px;background:linear-gradient(90deg,rgba(217,179,95,0),rgba(217,179,95,.8))"></span>
         <span style="width:5px;height:5px;background:#d9b35f;transform:rotate(45deg);flex:none"></span>
         <span style="font-size:clamp(10px,2.6vw,12.5px);letter-spacing:.32em;color:#d9b35f;text-transform:uppercase;font-weight:500;white-space:nowrap">Zwei Restaurants · eine Adresse</span>
@@ -58,35 +103,35 @@
       </div>
 
       <!-- logo emblem -->
-      <div style="width:clamp(130px,26vw,190px);height:clamp(130px,26vw,190px);border-radius:50%;overflow:hidden;margin-bottom:clamp(28px,4vh,42px);box-shadow:0 0 0 1.5px rgba(217,179,95,.55),0 0 60px rgba(214,160,72,.28),0 18px 50px rgba(0,0,0,.6)">
+      <div class="fu fu2" style="width:clamp(130px,26vw,190px);height:clamp(130px,26vw,190px);border-radius:50%;overflow:hidden;margin-bottom:clamp(28px,4vh,42px);box-shadow:0 0 0 1.5px rgba(217,179,95,.55),0 0 60px rgba(214,160,72,.28),0 18px 50px rgba(0,0,0,.6)">
         <img src="assets/logo.png" alt="Agape Burger &amp; Pizzeria Nazareth" style="width:100%;height:100%;object-fit:cover;display:block" />
       </div>
 
-      <h1 style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(40px,8.5vw,82px);line-height:1.02;letter-spacing:-.01em;margin-bottom:22px">
+      <h1 class="fu fu3" style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(40px,8.5vw,82px);line-height:1.02;letter-spacing:-.01em;margin-bottom:22px">
         <span style="color:#f7f1e6">Unsere neue App </span><span style="background:linear-gradient(135deg,#b9803a,#f4dd9b 48%,#c9952f 80%,#f6e7b0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">ist da.</span>
       </h1>
 
-      <p style="font-size:clamp(16px,3.4vw,21px);color:#cfc7b8;max-width:600px;line-height:1.5;margin-bottom:clamp(30px,4.5vh,44px);font-weight:300">
+      <p class="fu fu4" style="font-size:clamp(16px,3.4vw,21px);color:#cfc7b8;max-width:600px;line-height:1.5;margin-bottom:clamp(30px,4.5vh,44px);font-weight:300">
         Bestell ab jetzt direkt bei uns – über App &amp; Website. Burger mit Liebe und Pizza aus dem Holzofen, ohne Umwege.
       </p>
 
       <!-- CTAs -->
-      <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center">
-        <a href="#" style="display:inline-flex;align-items:center;gap:10px;padding:16px 30px;border-radius:999px;text-decoration:none;font-weight:600;font-size:16px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);box-shadow:0 10px 30px rgba(202,161,78,.35)">
+      <div class="fu fu5" style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center">
+        <a href="#" class="btn" style="display:inline-flex;align-items:center;gap:10px;padding:16px 30px;border-radius:999px;text-decoration:none;font-weight:600;font-size:16px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);box-shadow:0 10px 30px rgba(202,161,78,.35)">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1a1206" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
           Jetzt online bestellen
         </a>
-        <a href="#" style="display:inline-flex;align-items:center;gap:11px;padding:13px 22px;border-radius:14px;text-decoration:none;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.4);color:#f4ecdd">
+        <a href="#" class="btn" style="display:inline-flex;align-items:center;gap:11px;padding:13px 22px;border-radius:14px;text-decoration:none;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.4);color:#f4ecdd">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#f4ecdd"><path d="M17.05 12.04c-.03-2.6 2.13-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.23 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.38.81 1.4-.02 2.28-1.27 3.13-2.53.99-1.45 1.4-2.86 1.42-2.93-.03-.01-2.72-1.04-2.75-4.13zM14.6 4.55c.71-.87 1.2-2.07 1.06-3.27-1.03.04-2.28.69-3.02 1.55-.66.76-1.24 1.99-1.09 3.16 1.15.09 2.33-.58 3.05-1.44z"/></svg>
           <span style="display:flex;flex-direction:column;line-height:1.1;text-align:left"><span style="font-size:9.5px;letter-spacing:.06em;color:#a79f90;text-transform:uppercase">Laden im</span><span style="font-size:15px;font-weight:600">App Store</span></span>
         </a>
-        <a href="#" style="display:inline-flex;align-items:center;gap:11px;padding:13px 22px;border-radius:14px;text-decoration:none;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.4);color:#f4ecdd">
+        <a href="#" class="btn" style="display:inline-flex;align-items:center;gap:11px;padding:13px 22px;border-radius:14px;text-decoration:none;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.4);color:#f4ecdd">
           <svg width="20" height="22" viewBox="0 0 24 24"><path d="M3.6 1.8C3.3 2.1 3.1 2.6 3.1 3.2v17.6c0 .6.2 1.1.5 1.4l.1.1L13.5 12.6v-.2L3.7 1.7l-.1.1z" fill="#5BC9F4"/><path d="M16.8 15.9l-3.3-3.3v-.2l3.3-3.3.1.1 3.9 2.2c1.1.6 1.1 1.7 0 2.3l-3.9 2.2-.1.1z" fill="#F9B70F"/><path d="M16.9 15.8L13.5 12.4 3.6 22.2c.4.4 1 .4 1.7.1l11.6-6.5" fill="#EF4136"/><path d="M16.9 9L5.3 2.5C4.6 2.1 4 2.2 3.6 2.6l9.9 9.8L16.9 9z" fill="#4AB952"/></svg>
           <span style="display:flex;flex-direction:column;line-height:1.1;text-align:left"><span style="font-size:9.5px;letter-spacing:.06em;color:#a79f90;text-transform:uppercase">Jetzt bei</span><span style="font-size:15px;font-weight:600">Google Play</span></span>
         </a>
       </div>
 
-      <p style="margin-top:clamp(26px,4vh,40px);font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(15px,3vw,18px);color:#d9b35f">Hier gibt's die besten Angebote &amp; Preise.</p>
+      <p class="fu fu6" style="margin-top:clamp(26px,4vh,40px);font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(15px,3vw,18px);color:#d9b35f">Hier gibt's die besten Angebote &amp; Preise.</p>
     </div>
   </section>
 
@@ -95,9 +140,9 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(20px,3vw,34px);align-items:stretch;position:relative">
 
       <!-- Burger card -->
-      <article style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(217,179,95,.28);background:linear-gradient(180deg,#161109,#100d0e)">
+      <article class="card reveal" style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(217,179,95,.28);background:linear-gradient(180deg,#161109,#100d0e)">
         <div style="height:clamp(220px,32vw,300px);overflow:hidden">
-          <img src="assets/burger.png" alt="Agape Burger" style="width:100%;height:100%;object-fit:cover;object-position:center 55%;display:block" />
+          <img class="card-img" src="assets/burger.png" alt="Agape Burger" style="width:100%;height:100%;object-fit:cover;object-position:center 55%;display:block" />
         </div>
         <div style="padding:clamp(22px,3vw,32px)">
           <span style="font-size:11px;letter-spacing:.26em;color:#d9b35f;text-transform:uppercase;font-weight:500">Agape Burger</span>
@@ -107,9 +152,9 @@
       </article>
 
       <!-- Pizza card -->
-      <article style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(217,179,95,.28);background:linear-gradient(180deg,#161109,#100d0e)">
+      <article class="card reveal d1" style="position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(217,179,95,.28);background:linear-gradient(180deg,#161109,#100d0e)">
         <div style="height:clamp(220px,32vw,300px);overflow:hidden">
-          <img src="assets/pizza.png" alt="Pizzeria Nazareth" style="width:100%;height:100%;object-fit:cover;object-position:72% 28%;display:block" />
+          <img class="card-img" src="assets/pizza.png" alt="Pizzeria Nazareth" style="width:100%;height:100%;object-fit:cover;object-position:72% 28%;display:block" />
         </div>
         <div style="padding:clamp(22px,3vw,32px)">
           <span style="font-size:11px;letter-spacing:.26em;color:#d9b35f;text-transform:uppercase;font-weight:500">Pizzeria Nazareth</span>
@@ -119,7 +164,7 @@
       </article>
 
       <!-- center seal -->
-      <div style="position:absolute;top:clamp(160px,26vw,250px);left:50%;transform:translate(-50%,-50%);z-index:5;width:clamp(64px,11vw,92px);height:clamp(64px,11vw,92px);border-radius:50%;background:#0b0a0d;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px #0b0a0d,0 8px 24px rgba(0,0,0,.6)">
+      <div class="seal" style="position:absolute;top:clamp(160px,26vw,250px);left:50%;transform:translate(-50%,-50%);z-index:5;width:clamp(64px,11vw,92px);height:clamp(64px,11vw,92px);border-radius:50%;background:#0b0a0d;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px #0b0a0d,0 8px 24px rgba(0,0,0,.6)">
         <img src="assets/seal.png" alt="&amp;" style="width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))" />
       </div>
     </div>
@@ -131,28 +176,28 @@
     <div style="position:relative;z-index:2;max-width:920px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center">
 
       <div style="display:flex;flex-direction:column;align-items:center">
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px">
+        <div class="reveal" style="display:flex;align-items:center;gap:14px;margin-bottom:28px">
           <span style="width:44px;height:1px;background:linear-gradient(90deg,rgba(217,179,95,0),rgba(217,179,95,.9))"></span>
           <span style="font-size:13px;letter-spacing:.34em;color:#d9b35f;text-transform:uppercase;font-weight:500">Direkt bestellen</span>
           <span style="width:44px;height:1px;background:linear-gradient(90deg,rgba(217,179,95,.9),rgba(217,179,95,0))"></span>
         </div>
-        <h2 style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(38px,6.6vw,68px);line-height:1.04;margin-bottom:26px;color:#f7f1e6">Bestell direkt bei uns –<br><span style="background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">spar bei jeder Bestellung.</span></h2>
-        <p style="color:#c3bbac;font-size:clamp(17px,2.4vw,21px);line-height:1.6;margin-bottom:42px;font-weight:300;max-width:660px">Über App &amp; Website bestellst du ohne Liefer-Gebühren von Drittanbietern. So bleibt mehr bei der Familie und im Team – und du bekommst die besten Preise und Angebote.</p>
-        <ul style="list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:18px 40px;margin-bottom:46px">
+        <h2 class="reveal d1" style="font-family:'Playfair Display',serif;font-weight:800;font-size:clamp(38px,6.6vw,68px);line-height:1.04;margin-bottom:26px;color:#f7f1e6">Bestell direkt bei uns –<br><span style="background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">spar bei jeder Bestellung.</span></h2>
+        <p class="reveal d1" style="color:#c3bbac;font-size:clamp(17px,2.4vw,21px);line-height:1.6;margin-bottom:42px;font-weight:300;max-width:660px">Über App &amp; Website bestellst du ohne Liefer-Gebühren von Drittanbietern. So bleibt mehr bei der Familie und im Team – und du bekommst die besten Preise und Angebote.</p>
+        <ul class="reveal d2" style="list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:18px 40px;margin-bottom:46px">
           <li style="display:flex;align-items:center;gap:15px;font-size:clamp(16px,2vw,19px);color:#e8e0d2"><span style="width:34px;height:34px;border-radius:50%;background:rgba(217,179,95,.16);display:inline-flex;align-items:center;justify-content:center;flex:none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#d9b35f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Exklusive Angebote &amp; treue-Rabatte</li>
           <li style="display:flex;align-items:center;gap:15px;font-size:clamp(16px,2vw,19px);color:#e8e0d2"><span style="width:34px;height:34px;border-radius:50%;background:rgba(217,179,95,.16);display:inline-flex;align-items:center;justify-content:center;flex:none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#d9b35f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Schnelle Abholung &amp; Lieferung</li>
           <li style="display:flex;align-items:center;gap:15px;font-size:clamp(16px,2vw,19px);color:#e8e0d2"><span style="width:34px;height:34px;border-radius:50%;background:rgba(217,179,95,.16);display:inline-flex;align-items:center;justify-content:center;flex:none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#d9b35f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Beide Restaurants in einer App</li>
         </ul>
-        <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">
-          <a href="#" style="display:inline-flex;align-items:center;gap:11px;padding:18px 34px;border-radius:16px;text-decoration:none;font-weight:600;font-size:17px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);box-shadow:0 12px 34px rgba(202,161,78,.36)">
+        <div class="reveal d3" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">
+          <a href="#" class="btn" style="display:inline-flex;align-items:center;gap:11px;padding:18px 34px;border-radius:16px;text-decoration:none;font-weight:600;font-size:17px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32);box-shadow:0 12px 34px rgba(202,161,78,.36)">
             <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#1a1206" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
             Online bestellen
           </a>
-          <a href="#" style="display:inline-flex;align-items:center;gap:13px;padding:16px 28px;border-radius:16px;text-decoration:none;background:#000;border:1px solid rgba(217,179,95,.4);color:#fff">
+          <a href="#" class="btn" style="display:inline-flex;align-items:center;gap:13px;padding:16px 28px;border-radius:16px;text-decoration:none;background:#000;border:1px solid rgba(217,179,95,.4);color:#fff">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M17.05 12.04c-.03-2.6 2.13-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.23 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.38.81 1.4-.02 2.28-1.27 3.13-2.53.99-1.45 1.4-2.86 1.42-2.93-.03-.01-2.72-1.04-2.75-4.13zM14.6 4.55c.71-.87 1.2-2.07 1.06-3.27-1.03.04-2.28.69-3.02 1.55-.66.76-1.24 1.99-1.09 3.16 1.15.09 2.33-.58 3.05-1.44z"/></svg>
             <span style="display:flex;flex-direction:column;line-height:1.12;text-align:left"><span style="font-size:11px;letter-spacing:.06em;color:#bbb;text-transform:uppercase">Laden im</span><span style="font-size:18px;font-weight:600">App Store</span></span>
           </a>
-          <a href="#" style="display:inline-flex;align-items:center;gap:13px;padding:16px 28px;border-radius:16px;text-decoration:none;background:#000;border:1px solid rgba(217,179,95,.4);color:#fff">
+          <a href="#" class="btn" style="display:inline-flex;align-items:center;gap:13px;padding:16px 28px;border-radius:16px;text-decoration:none;background:#000;border:1px solid rgba(217,179,95,.4);color:#fff">
             <svg width="24" height="26" viewBox="0 0 24 24"><path d="M3.6 1.8C3.3 2.1 3.1 2.6 3.1 3.2v17.6c0 .6.2 1.1.5 1.4l.1.1L13.5 12.6v-.2L3.7 1.7l-.1.1z" fill="#5BC9F4"/><path d="M16.8 15.9l-3.3-3.3v-.2l3.3-3.3.1.1 3.9 2.2c1.1.6 1.1 1.7 0 2.3l-3.9 2.2-.1.1z" fill="#F9B70F"/><path d="M16.9 15.8L13.5 12.4 3.6 22.2c.4.4 1 .4 1.7.1l11.6-6.5" fill="#EF4136"/><path d="M16.9 9L5.3 2.5C4.6 2.1 4 2.2 3.6 2.6l9.9 9.8L16.9 9z" fill="#4AB952"/></svg>
             <span style="display:flex;flex-direction:column;line-height:1.12;text-align:left"><span style="font-size:11px;letter-spacing:.06em;color:#bbb;text-transform:uppercase">Jetzt bei</span><span style="font-size:18px;font-weight:600">Google Play</span></span>
           </a>
@@ -165,7 +210,7 @@
   <!-- ============ VERSE BAND ============ -->
   <section style="position:relative;padding:clamp(60px,10vh,120px) clamp(20px,5vw,40px);text-align:center;border-top:1px solid rgba(217,179,95,.14);border-bottom:1px solid rgba(217,179,95,.14)">
     <div style="position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 50%,#15110a,#0b0a0d 70%);z-index:0"></div>
-    <div style="position:relative;z-index:2;max-width:760px;margin:0 auto">
+    <div class="reveal" style="position:relative;z-index:2;max-width:760px;margin:0 auto">
       <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:30px">
         <span style="width:clamp(30px,8vw,70px);height:1px;background:linear-gradient(90deg,rgba(217,179,95,0),rgba(217,179,95,.7))"></span>
         <span style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(16px,3.4vw,21px);color:#d9b35f">Agape heißt Liebe.</span>
@@ -183,7 +228,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(30px,4vw,50px);margin-bottom:clamp(40px,6vh,60px)">
 
       <!-- brand -->
-      <div>
+      <div class="reveal">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
           <span style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex:none;box-shadow:0 0 0 1.5px rgba(217,179,95,.5)"><img src="assets/logo.png" alt="Agape" style="width:100%;height:100%;object-fit:cover" /></span>
           <span style="display:flex;flex-direction:column;line-height:1.15">
@@ -195,7 +240,7 @@
       </div>
 
       <!-- contact -->
-      <div>
+      <div class="reveal d1">
         <h4 style="font-size:12px;letter-spacing:.24em;color:#d9b35f;text-transform:uppercase;margin-bottom:18px;font-weight:600">Kontakt</h4>
         <a href="https://maps.google.com/?q=Meerstra%C3%9Fe+55+53757+Sankt+Augustin" target="_blank" rel="noopener" style="display:flex;gap:11px;align-items:flex-start;text-decoration:none;color:#e8e0d2;font-size:15px;margin-bottom:16px;line-height:1.5">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d9b35f" stroke-width="2" style="flex:none;margin-top:2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -212,12 +257,12 @@
       </div>
 
       <!-- order links -->
-      <div>
+      <div class="reveal d2">
         <h4 style="font-size:12px;letter-spacing:.24em;color:#d9b35f;text-transform:uppercase;margin-bottom:18px;font-weight:600">Bestellen</h4>
         <div style="display:flex;flex-direction:column;gap:12px">
-          <a href="#" style="display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:600;font-size:15px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32)">Zur Website <span style="font-size:18px;line-height:1">→</span></a>
-          <a href="#" style="display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:500;font-size:15px;color:#f4ecdd;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.35)">App Store <span style="font-size:18px;line-height:1;color:#d9b35f">→</span></a>
-          <a href="#" style="display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:500;font-size:15px;color:#f4ecdd;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.35)">Google Play <span style="font-size:18px;line-height:1;color:#d9b35f">→</span></a>
+          <a href="#" class="btn" style="display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:600;font-size:15px;color:#1a1206;background:linear-gradient(135deg,#caa14e,#f6e3a1 50%,#c08a32)">Zur Website <span style="font-size:18px;line-height:1">→</span></a>
+          <a href="#" class="btn" style="display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:500;font-size:15px;color:#f4ecdd;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.35)">App Store <span style="font-size:18px;line-height:1;color:#d9b35f">→</span></a>
+          <a href="#" class="btn" style="display:inline-flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 18px;border-radius:12px;text-decoration:none;font-weight:500;font-size:15px;color:#f4ecdd;background:rgba(255,255,255,.04);border:1px solid rgba(217,179,95,.35)">Google Play <span style="font-size:18px;line-height:1;color:#d9b35f">→</span></a>
         </div>
       </div>
     </div>
@@ -257,6 +302,26 @@
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+  })();
+
+  // Scroll reveal — fade-up sections as they enter the viewport
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (el) { io.observe(el); });
   })();
 </script>
 
